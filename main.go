@@ -1,19 +1,20 @@
 package main
 
 import (
-    "bytes"
-    "encoding/gob"
-    "fmt"
+	"fmt"
+	"log"
+
+	"github.com/golang/protobuf/proto"
 )
-type Entry struct {
-    Key string
-    Val string
-}
 
 func main() {
-    var buf bytes.Buffer
-    enc := gob.NewEncoder(&buf)
-    e := Entry { "k1", "v1" }
-    enc.Encode(e)
-    fmt.Println(buf.Bytes())
+	e := &Entry{
+		Key: proto.String("k1"),
+		Val: proto.String("v1"),
+	}
+	data, err := proto.Marshal(e)
+	if err != nil {
+		log.Fatal("marshaling error: ", err)
+	}
+	fmt.Println(data)
 }
